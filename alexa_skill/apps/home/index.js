@@ -4,10 +4,10 @@ const _ = require('lodash');
 const Alexa = require('alexa-app');
 const SSH = require('simple-ssh');
 var app = new Alexa.app('home');
-var exec = require('child_process').exec;
+var mqtt = require('mqtt')
 
-
-var ir_Controller = require('../../scritps/ir_controller.js');
+// home/tv
+// home/lights
 
 var ssh = new SSH({
     host: '192.168.0.26',
@@ -31,9 +31,12 @@ app.intent('contorlTv',
   function(request,response) {
        console.log("ALEXA: tv control");
        var action = request.slot('TvAction');
-       ir_Controller.doAction(action, exec, function() {
-         response.say("OK");
-       });
+       console.log("ALEXA: SENDINNG MQTT home/tv-" + action);
+       var client  = mqtt.connect('mqtt://192.168.0.17:1883')
+       client.publish('home/tv', action);
+       client.end()
+
+       response.say("OK");
     }
 );
    

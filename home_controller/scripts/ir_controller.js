@@ -7,6 +7,8 @@ function doAction(action, exec) {
 
     case "turn on":
     case "turn off":
+    case "turnon":
+    case "turnoff":
     case "shutdown":
         actionCommand = "KEY_POWER";
         device = "SAMSUNG_AA59-00600A_POWER KEY_POWER";
