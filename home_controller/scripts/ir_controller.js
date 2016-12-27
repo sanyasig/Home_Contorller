@@ -2,9 +2,8 @@
 function doAction(action, exec) {
   var actionCommand = "";
   var device = "SAMSUNG_AA59-00600A";
- 
+  console.log("HOME_CONTROLLER: Got action command " + action); 
   switch(action) {
-
     case "turn on":
     case "turn off":
     case "turnon":
@@ -19,6 +18,20 @@ function doAction(action, exec) {
     case "un mute":
         actionCommand = "KEY_MUTE";
         break;
+
+    case "volumeup":
+    case "volume up":
+    case "turn up":
+    case "turnup":
+        actionCommand = "KEY_VOLUMEUP";
+        break;
+
+    case "volumedown":
+    case "volume down":
+    case "turn down":
+    case "turndown":
+        actionCommand = "KEY_VOLUMEDOWN";
+        break;    
 
     default:
         actionCommand = "noting";

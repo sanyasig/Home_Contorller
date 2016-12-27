@@ -26,7 +26,7 @@ app.launch(function(req, res) {
 app.intent('contorlTv',
   {
        "slots":{"TvAction": "TvAction" },
-      "utterances" : ["{TvAction} {tv|tele}"]
+      "utterances" : ["{-|TvAction} {the | } {tv|tele}"]
   },
   function(request,response) {
        console.log("ALEXA: tv control");
@@ -35,7 +35,6 @@ app.intent('contorlTv',
        var client  = mqtt.connect('mqtt://192.168.0.17:1883')
        client.publish('home/tv', action);
        client.end()
-
        response.say("OK");
     }
 );
@@ -56,6 +55,51 @@ app.intent('shoutDownPC',
     response.say("shutting down now");
   }
 );
+
+app.intent('bedtime',
+  {
+     "utterances":[ "{its|to|for|} {time| } {start|to goto| } {bedtime|sleep|bed}"]
+  },
+  function(request,response) {
+    console.log("in bedtime");
+    // turn lights and tv off
+    var client  = mqtt.connect('mqtt://192.168.0.17:1883')
+    client.publish('home/tv', 'turnoff');
+    client.publish('home/lights', 'turnoff');
+    client.end()
+    //request.session('currenQuestion','gym');
+    response.say("turning lights and tv off, are you going to gym tomorrow?").shouldEndSession(false);
+  }
+);
+
+app.intent('answerYes',
+  {
+     "utterances":["{yes|yeah}"]
+  },
+  function(request,response) {
+    // of now assume only question we ever ask is for gym?
+    console.log("in yes");
+    //var question = request.session('currenQuestion');
+    var question = "gym";
+    var client  = mqtt.connect('mqtt://192.168.0.17:1883')
+    client.publish('home/alarm', '5:45');
+    client.end()
+    response.say("setting the alarm for five fortyfive AM, Good night and sleep well");
+  }
+);
+
+app.intent('answerNO',
+  {
+     "utterances":["{no|nop}"]
+  },
+  function(request,response) {
+    var client  = mqtt.connect('mqtt://192.168.0.17:1883')
+    client.publish('home/alarm', '7:45');
+    client.end();
+   response.say("setting the alarm for seven forty five AM");
+  }
+);
+
 
 module.change_code = 1;
 module.exports = app;
