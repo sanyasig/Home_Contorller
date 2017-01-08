@@ -43,7 +43,7 @@ module.exports.doAction = doAction;
 // so the light stays conencted
 var minutes = 20, the_interval = minutes * 60 * 1000;
 setInterval(function() {
-        needle.get('https://api.lifx.com/v1/lights/all', options, function(err, resp, body) {
+        needle.get('https://api.lifx.com/v1/lights/all', headers, function(err, resp, body) {
 	   	console.log(body);
 	});
 }, the_interval);

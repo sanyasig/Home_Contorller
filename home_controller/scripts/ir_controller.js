@@ -1,5 +1,6 @@
+var exec = require('child_process').exec;
 
-function doAction(action, exec) {
+function doAction(action, callback) {
   var actionCommand = "";
   var device = "SAMSUNG_AA59-00600A";
   console.log("HOME_CONTROLLER: Got action command " + action); 
