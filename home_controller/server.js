@@ -9,6 +9,7 @@ var IFTTTMaker = require('iftttmaker')(apiKey);
 // home/lights
 var irController = require('./scripts/ir_controller.js');
 var iftttMaker = require('./scripts/ifttt_maker.js');
+var lifx = require('./scripts/lifx.js');
 
 var client  = mqtt.connect('mqtt://192.168.0.17:1883')
 client.subscribe('home/alarm');
@@ -29,6 +30,10 @@ client.on('message', function (topic, message) {
         break;
     case "home/alarm":
         iftttMaker.doAction("alarm-5:45", IFTTTMaker, function() {
+          response.say("OK");
+        });
+    case "home/lights":
+        lifx.doAction(action, function() {
           response.say("OK");
         });
     break;    
