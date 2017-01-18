@@ -7,7 +7,8 @@ var client  = mqtt.connect('mqtt://192.168.0.17:1883')
 
 var subscriptions = {
 	'home/lights' : require('./scripts/lifx.js'),
-	'home/tv' : require('./scripts/ir_controller.js')
+	'home/tv' : require('./scripts/ir_controller.js'),
+  'home/adb' : require('./scripts/adb_controller.js')
 }
 
 for (k in subscriptions) {
