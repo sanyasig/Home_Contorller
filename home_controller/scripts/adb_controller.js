@@ -6,6 +6,7 @@ var mqtt = require('mqtt')
 var ir_controller = require('./ir_controller.js')
 
 var client  = mqtt.connect('mqtt://192.168.0.17:1883')
+var fireStick = "192.168.0.66";
 
 
 function doAction(action, callback) {
@@ -14,30 +15,29 @@ function doAction(action, callback) {
 
   switch(action) {
     case "kodi":
-      mainActivity = "org.xbmc.kodi/.Splash"
-        break;
+      mainActivity = "shell am start -n org.xbmc.kodi/.Splash"
+      break;
 
     case "youtube":
-      mainActivity = "org.chromium.youtube_apk/.YouTubeActivity"
-        break;   
+      mainActivity = "shell am start -n org.chromium.youtube_apk/.YouTubeActivity"
+      break;
+
+    case "reboot":
+      mainActivity = "reboot";
+      break;   
 
     default:
         actionCommand = "noting";
   }
 
 if(mainActivity != "" || mainActivity != undefined){
-    ir_controller.doAction("turnon", function() {
-            response.say("OK");
-         }
-     );;
-
   sendAdb(mainActivity);
 } 
 
 
 
 function sendAdb(command) {
-  var finalCommand = "/usr/bin/adb shell am start -n " + command;
+  var finalCommand = "/usr/bin/adb " + command;
 
   var child = exec("/usr/bin/adb kill-server", function(error, stdout, stderr) {
     process.stdout.write(stdout);
@@ -47,7 +47,7 @@ function sendAdb(command) {
       process.stdout.write(stdout);
       process.stderr.write(stderr);
 
-      exec("/usr/bin/adb connect 192.168.0.153", function(error, stdout, stderr) {
+      exec("/usr/bin/adb connect 192.168.0.66", function(error, stdout, stderr) {
         process.stdout.write(stdout);
         process.stderr.write(stderr);
 
@@ -55,7 +55,7 @@ function sendAdb(command) {
            process.stdout.write(stdout);
            process.stderr.write(stderr);
 
-           exec("/usr/bin/adb shell input keyevent KEYCODE_DPAD_RIGHT", function(error, stdout, stderr) { 
+           exec("/usr/bin/adb shell input keyevent 19", function(error, stdout, stderr) { 
             process.stdout.write(stdout);
             process.stderr.write(stderr);
            

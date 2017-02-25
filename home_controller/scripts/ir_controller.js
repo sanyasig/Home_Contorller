@@ -1,3 +1,5 @@
+// sudo lircd -d /dev/lirc0
+
 var exec = require('child_process').exec;
 
 function doAction(action, callback) {
@@ -24,14 +26,14 @@ function doAction(action, callback) {
     case "volume up":
     case "turn up":
     case "turnup":
-        actionCommand = "KEY_VOLUMEUP";
+        actionCommand = "KEY_VOLUMEUP --count 8";
         break;
 
     case "volumedown":
     case "volume down":
     case "turn down":
     case "turndown":
-        actionCommand = "KEY_VOLUMEDOWN";
+        actionCommand = "KEY_VOLUMEDOWN --count 8";
         break;    
 
     default:
