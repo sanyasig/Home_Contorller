@@ -10,7 +10,8 @@ var subscriptions = {
 	'home/tv' : require('./scripts/ir_controller.js'),
   'home/adb': require('./scripts/adb_controller.js'),
   'home/kodi': require('./scripts/kodi_controller.js'),
-  'routine/morning': require('./scripts/morning.js')
+  'routine/morning': require('./scripts/morning.js'),
+  'home/dash': require('./scripts/amazonDash.js')
 }
 
 for (k in subscriptions) {

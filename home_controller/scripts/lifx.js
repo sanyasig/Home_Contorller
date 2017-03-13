@@ -1,49 +1,54 @@
-var needle = require('needle');
+var lifx = require('lifx');
 
-var url = "https://api.lifx.com/v1/lights/all/state";
-var auth = "c722eca598537ff4b850e6bccc7a62ce52a160562e5d5e0887e7af567548a602";
+var lx = lifx.init();
 
-var headers = {
-  headers: { 'Authorization': 'Bearer ' + auth }
-}
+lx.on('bulbstate', function(b) {
+        //console.log('Bulb state: ' + util.inspect(b));
+});
 
-var powerState = {};
+lx.on('bulbonoff', function(b) {
+        //console.log('Bulb on/off: ' + util.inspect(b));
+});
 
-var toggleState = function (powerState){
-	console.log(powerState)
-	needle.put(url, powerState, headers, function(err, resp, body) {
-	   	console.log(body);
-	});
-}
+lx.on('bulb', function(b) {
+        console.log('New bulb found: ' + b.name + " : " + b.addr.toString("hex"));
+});
 
-var options = {
-	"poweron": function() {
-					powerState.power = "on"; toggleState(powerState);
-	           },
-    "poweroff": function() {
-					powerState.power = "off"; toggleState(powerState);
-	           },
-};
+lx.on('gateway', function(g) {
+        console.log('New gateway found: ' + g.ip);
+});
+
+lx.on('packet', function(p) {
+        // Show informational packets
+        switch (p.packetTypeShortName) {
+                case 'powerState':
+                case 'wifiInfo':
+                case 'wifiFirmwareState':
+                case 'wifiState':
+                case 'accessPoint':
+                case 'bulbLabel':
+                case 'tags':
+                case 'tagLabels':
+                //case 'lightStatus':
+                case 'timeState':
+                case 'resetSwitchState':
+                case 'meshInfo':
+                case 'meshFirmware':
+                case 'versionState':
+                case 'infoState':
+                case 'mcuRailVoltage':
+                        console.log(p.packetTypeName + " - " + p.preamble.bulbAddress.toString('hex') + " - " + util.inspect(p.payload));
+                        break;
+                default:
+                        break;
+        }
+});
 
 
 function doAction(action, callback) {
-	action = action.trim();
-	action = action.toLowerCase();
-	var call = options[action];
-
-	if (call != undefined) {
-	    options[action]();
-	}	
-
-}; 
+  console.log("Alarm Triggered");
+  var b = lx.bulbs['d073d5014163'];
+  lx.lightsOff();
+};
 
 module.exports.doAction = doAction;
-
-
-// so the light stays conencted
-var minutes = 20, the_interval = minutes * 60 * 1000;
-setInterval(function() {
-        needle.get('https://api.lifx.com/v1/lights/all', headers, function(err, resp, body) {
-	   	console.log(body);
-	});
-}, the_interval);
