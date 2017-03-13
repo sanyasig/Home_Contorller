@@ -2,7 +2,7 @@ var lifx = require('./lifx.js');
 
 function doAction(action, callback) {
   console.log("Alarm Triggered");
-  lifx.doAction("bed-room", function() {
+  lifx.doAction("bedRoom:OFF", function() {
             response.say("OK");
          });
 };

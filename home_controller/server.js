@@ -11,7 +11,9 @@ var subscriptions = {
   'home/adb': require('./scripts/adb_controller.js'),
   'home/kodi': require('./scripts/kodi_controller.js'),
   'routine/morning': require('./scripts/morning.js'),
-  'home/dash': require('./scripts/amazonDash.js')
+  'home/dash': require('./scripts/amazonDash.js'),
+   'home/alarm': require('./scripts/alarm.js')
+
 }
 
 for (k in subscriptions) {
