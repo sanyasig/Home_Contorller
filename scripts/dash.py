@@ -2,9 +2,13 @@ from pydhcplib.dhcp_network import *
 import paho.mqtt.publish as publish
 
 
-def do_something():
+def switch_off():
 	print("button has been pressed")
 	publish.single("home/dash", "arial-button", hostname="192.168.0.17")
+
+	def switch_on():
+	print("button has been pressed")
+	publish.single("home/dash", "blank-button", hostname="192.168.0.17")
 
 
 netopt = {'client_listen_port':"68", 'server_listen_port':"67", 'listen_address':"0.0.0.0"}
@@ -37,6 +41,7 @@ class DashButtons():
 		self.buttons[mac] = function
 
 	def press(self, mac):
+		print
 		if mac in self.buttons:
 			self.buttons[mac]()
 			return True
@@ -44,7 +49,9 @@ class DashButtons():
 
 		
 dashbuttons = DashButtons()
-dashbuttons.register("ac:63:be:31:1e:2c", do_something)
+dashbuttons.register("ac:63:be:31:1e:2c", switch_off)
+dashbuttons.register("ac:63:be:9d:fb:a9", switch_on)
+
 server = Server(netopt, dashbuttons)
 
 while True :
