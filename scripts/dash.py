@@ -6,7 +6,7 @@ def switch_off():
 	print("button has been pressed")
 	publish.single("home/dash", "arial-button", hostname="192.168.0.17")
 
-	def switch_on():
+def switch_on():
 	print("button has been pressed")
 	publish.single("home/dash", "blank-button", hostname="192.168.0.17")
 
